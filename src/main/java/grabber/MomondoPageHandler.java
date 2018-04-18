@@ -5,9 +5,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import grabber.repository.model.DestinationOption;
-import grabber.repository.model.PriceInfo;
-import grabber.service.model.TravellersWithKids;
+import grabber.service.model.DestinationOptionDTO;
+import grabber.service.model.KidDTO;
+import grabber.service.model.PriceInfoDTO;
+import grabber.service.model.TravellersDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
@@ -16,6 +17,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.containers.BrowserWebDriverContainer;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.List;
 import java.util.Set;
@@ -29,10 +31,10 @@ public class MomondoPageHandler {
 
     private static final Logger log = LogManager.getLogger(MomondoPageHandler.class);
 
-    private DestinationOption destinationOption;
-    private TravellersWithKids travellers;
+    private DestinationOptionDTO destinationOption;
+    private TravellersDTO travellers;
 
-    public MomondoPageHandler(DestinationOption destinationOption, TravellersWithKids travellers) {
+    public MomondoPageHandler(DestinationOptionDTO destinationOption, TravellersDTO travellers) {
         this.destinationOption = destinationOption;
         this.travellers = travellers;
     }
@@ -46,7 +48,7 @@ public class MomondoPageHandler {
         }
     }
 
-    PriceInfo getPriceInfo() {
+    PriceInfoDTO getPriceInfo() {
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         try (BrowserWebDriverContainer browser =
                      new BrowserWebDriverContainer("selenium/standalone-firefox:3.11.0")
@@ -63,7 +65,8 @@ public class MomondoPageHandler {
             $(By.className("c-flights-result-aside-results-search-label")).waitUntil(text("Otsing lõppenud"), 30000);
             log.info("Flight results are loaded");
             ElementsCollection prices = $$(By.tagName("toggle-group-item"));
-            PriceInfo priceInfo = new PriceInfo();
+            PriceInfoDTO priceInfo = new PriceInfoDTO();
+            priceInfo.setCaptureTime(LocalDateTime.now());
             for (SelenideElement priceElement : prices) {
                 SelenideElement priceTitle = priceElement.$(By.className("c-flights_result_sortbar-item-headline"));
                 SelenideElement priceValue = priceElement.$(By.className("c-flights_result_sortbar-item-description"));
@@ -106,7 +109,7 @@ public class MomondoPageHandler {
         sb.append("?tc=eco&na=false&ac=");
         sb.append(travellers.getNrOfAdults());
         sb.append("&dp=false&currency=EUR&route_referrer=searchform");
-        Set<TravellersWithKids.Kid> kids = travellers.getKids();
+        Set<KidDTO> kids = travellers.getKids();
         if (!kids.isEmpty()) {
             sb.append("&ca=");
             List<String> ages = kids.stream().map(kid -> Integer.toString(getKidAge(kid.getBirthday()))).collect(Collectors.toList());

@@ -13,6 +13,9 @@ public class TravelInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @ManyToOne
+    private Travellers travellers;
+
     @OneToOne
     private DestinationOption destinationOption;
 

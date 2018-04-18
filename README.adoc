@@ -5,3 +5,9 @@
 === Docker
 Install Docker. On Windows, make sure you have this checkbox checked:
 image:/src/main/resources/documentation/docker-settings.png[]
+
+=== MySQL
+[source,sql,indent=0]
+CREATE SCHEMA MomondoGrabber;
+CREATE USER 'MomondoGrabberDB'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON MomondoGrabber.* TO 'MomondoGrabberDB'@'%';

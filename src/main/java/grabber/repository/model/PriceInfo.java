@@ -21,9 +21,4 @@ public class PriceInfo {
     @ManyToOne
     @JoinColumn(name = "travel_info_id", nullable = false)
     private TravelInfo travelInfo;
-
-    @Override
-    public String toString() {
-        return "minimal: " + minimal + "; fastest: " + fastest + "; best: " + best;
-    }
 }
