@@ -1,0 +1,7 @@
+= Momondo grabber
+
+== How to run this code
+
+=== Docker
+Install Docker. On Windows, make sure you have this checkbox checked:
+image:/src/main/resources/documentation/docker-settings.png[]
