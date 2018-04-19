@@ -3,6 +3,7 @@ package grabber.service;
 import grabber.repository.*;
 import grabber.repository.model.*;
 import grabber.service.model.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,13 +98,19 @@ public class MomondoGrabberService {
         for (TravelInfoDTO travelInfo : travelInfos) {
             Optional<TravelInfo> optionalTravelInfo = travelInfoRepository.findById(travelInfo.getId());
             TravelInfo savedTravelInfo = optionalTravelInfo.get();
+            Hibernate.initialize(savedTravelInfo.getPriceInfoHistory());
 
             PriceInfoDTO latestPriceInfo = travelInfo.getLatestPriceInfo();
+            if (latestPriceInfo.getBest() == 0) {
+                continue;
+            }
+
             PriceInfo priceInfo = new PriceInfo();
             priceInfo.setBest(latestPriceInfo.getBest());
             priceInfo.setFastest(latestPriceInfo.getFastest());
             priceInfo.setMinimal(latestPriceInfo.getMinimal());
             priceInfo.setCaptureTime(latestPriceInfo.getCaptureTime());
+            priceInfo.setTravelInfo(savedTravelInfo);
             PriceInfo savedPriceInfo = priceInfoRepository.save(priceInfo);
             savedTravelInfo.setLatestPriceInfo(savedPriceInfo);
             savedTravelInfo.getPriceInfoHistory().add(savedPriceInfo);

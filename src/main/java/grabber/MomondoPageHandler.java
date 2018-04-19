@@ -12,6 +12,9 @@ import grabber.service.model.TravellersDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testcontainers.containers.BrowserWebDriverContainer;
@@ -50,6 +53,14 @@ public class MomondoPageHandler {
 
     PriceInfoDTO getPriceInfo() {
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+        capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+        capabilities.setCapability("marionette", false);
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setAcceptUntrustedCertificates(true);
+        profile.setAssumeUntrustedCertificateIssuer(false);
+
+        capabilities.setCapability(FirefoxDriver.PROFILE, profile);
+
         try (BrowserWebDriverContainer browser =
                      new BrowserWebDriverContainer("selenium/standalone-firefox:3.11.0")
                              .withDesiredCapabilities(capabilities)) {
