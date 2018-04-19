@@ -54,7 +54,6 @@ public class MomondoPageHandler {
     PriceInfoDTO getPriceInfo() {
         DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-        capabilities.setCapability("marionette", false);
         FirefoxProfile profile = new FirefoxProfile();
         profile.setAcceptUntrustedCertificates(true);
         profile.setAssumeUntrustedCertificateIssuer(false);
@@ -62,7 +61,7 @@ public class MomondoPageHandler {
         capabilities.setCapability(FirefoxDriver.PROFILE, profile);
 
         try (BrowserWebDriverContainer browser =
-                     new BrowserWebDriverContainer("selenium/standalone-firefox:3.11.0")
+                     new BrowserWebDriverContainer("selenium/standalone-firefox:3.11.0-californium")
                              .withDesiredCapabilities(capabilities)) {
             browser.start();
 
