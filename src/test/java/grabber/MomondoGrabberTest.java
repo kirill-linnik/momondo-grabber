@@ -2,6 +2,7 @@ package grabber;
 
 import grabber.repository.model.DestinationOption;
 import grabber.repository.model.DestinationSetup;
+import grabber.service.MomondoGrabberService;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,7 +16,7 @@ class MomondoGrabberTest {
 
     @Test
     public void testDestinationGeneration() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        Method getDestinationOptions = MomondoGrabber.class.getDeclaredMethod("getDestinationOptions", DestinationSetup.class);
+        Method getDestinationOptions = MomondoGrabberService.class.getDeclaredMethod("getDestinationOptions", DestinationSetup.class);
         getDestinationOptions.setAccessible(true);
 
         DestinationSetup destinationSetup = new DestinationSetup();
